@@ -62,7 +62,7 @@ def modify_user(user_id):
     if not data:
         abort(400, "Not a JSON")
 
-    for key, value in data.item():
+    for key, value in data.items():
         ignore_keys = ["id", "created_at", "updated_at"]
         if key not in ignore_keys:
             setattr(user, key, value)
