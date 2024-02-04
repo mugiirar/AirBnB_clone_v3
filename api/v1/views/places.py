@@ -60,7 +60,7 @@ def delete_place(place_id):
         abort(404)
     storage.delete(place_to_delete)
     storage.save()
-    return jsonify({}), 200
+    return (jsonify({}), 200)
 
 @app_views.route('/places/<place_id>', methods=["PUT"], strict_slashes=False)
 def places_mod(place_id):
