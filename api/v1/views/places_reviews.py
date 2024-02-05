@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" Handles all default RestFul API actions """
+""" RestFul API actions """
 
 from api.v1.views import app_views
 from flask import jsonify, make_response, abort, request
@@ -9,10 +9,9 @@ from models.place import Place
 from models import storage
 
 
-@app_views.route('/places/<place_id>/reviews', methods=["GET"],
-                 strict_slashes=False)
-def get_reviews_by_place(place_id):
-    """ Return a jsonified review objects by place_id """
+@app_views.route('/places/<place_id>/reviews', methods=["GET"], strict_slashes=False)
+def reviews_by_place(place_id):
+    """ review objects by place_id """
     place_instance = storage.get(Place, place_id)
     if place_instance is None:
         abort(404)
@@ -23,8 +22,8 @@ def get_reviews_by_place(place_id):
 
 
 @app_views.route('/reviews/<review_id>', methods=["GET"], strict_slashes=False)
-def get_review_by_id(review_id):
-    """ Returns a jsonified review object by review_id """
+def review_by_id(review_id):
+    """jsonified review object by review_id """
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
@@ -34,8 +33,8 @@ def get_review_by_id(review_id):
 
 @app_views.route('/reviews/<review_id>', methods=["DELETE"],
                  strict_slashes=False)
-def delete_review(review_id):
-    """ Delete review object by review_id """
+def del_review(review_id):
+    """ review object by review_id """
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
@@ -47,8 +46,8 @@ def delete_review(review_id):
 
 @app_views.route('/places/<place_id>/reviews', methods=["POST"],
                  strict_slashes=False)
-def create_review(place_id):
-    """ Creating a review object """
+def cr_review(place_id):
+    """a review object """
     place_instance = storage.get(Place, place_id)
     if place_instance is None:
         abort(404)
@@ -75,7 +74,7 @@ def create_review(place_id):
 
 @app_views.route('/reviews/<review_id>', methods=["PUT"], strict_slashes=False)
 def update_review(review_id):
-    """ Updating a review object """
+    """ review object """
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
