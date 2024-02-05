@@ -8,13 +8,16 @@ from models import storage
 from api.v1.views import app_views
 from flask import jsonify, make_response, abort, request
 
-@app_views.route('/cities/<city_id>/places', methods=["GET"], strict_slashes=False)
+
+@app_views.route('/cities/<city_id>/places',
+                 methods=["GET"], strict_slashes=False)
 def give_place(city_id):
     """give back the city"""
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
     return jsonify([obj.to_dict() for obj in city.places])
+
 
 @app_views.route('/places/<place_id>', methods=["GET"], strict_slashes=False)
 def place_finder(place_id):
@@ -25,7 +28,9 @@ def place_finder(place_id):
 
     return (jsonify(place.to_dict()))
 
-@app_views.route('/cities/<city_id>/places', methods=["POST"], strict_slashes=False)
+
+@app_views.route('/cities/<city_id>/places',
+                 methods=["POST"], strict_slashes=False)
 def post_place(city_id):
     """posting a new place"""
     city = storage.get(City, city_id)
@@ -51,7 +56,10 @@ def post_place(city_id):
     new_place_obj.save()
     return (jsonify(new_place_obj.to_dict()), 201)
 
-@app_views.route('/places/<place_id>', methods=["DELETE"], strict_slashes=False)
+
+@app_views.route('/places/<place_id>',
+                 methods=["DELETE"],
+                 strict_slashes=False)
 def delete_place(place_id):
     """Delete place object"""
     place_to_delete = storage.get(Place, place_id)
@@ -60,6 +68,7 @@ def delete_place(place_id):
     storage.delete(place_to_delete)
     storage.save()
     return (jsonify({}), 200)
+
 
 @app_views.route('/places/<place_id>', methods=["PUT"], strict_slashes=False)
 def places_mod(place_id):

@@ -5,11 +5,13 @@ from models import storage
 from api.v1.views import app_views
 from flask import jsonify, make_response, abort, request
 
+
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
 def states_view():
     """ return a jsonified states objects """
     objs = storage.all(State)
     return jsonify([obj.to_dict() for obj in objs.values()])
+
 
 @app_views.route('/states/<state_id>', methods=["GET"], strict_slashes=False)
 def states_id_view(state_id):
@@ -19,7 +21,10 @@ def states_id_view(state_id):
         abort(404)
     return (jsonify(getter_id.to_dict()))
 
-@app_views.route('/states/<state_id>', methods=["DELETE"], strict_slashes=False)
+
+@app_views.route('/states/<state_id>',
+                 methods=["DELETE"],
+                 strict_slashes=False)
 def delete_id_state(state_id):
     """delete the city"""
     state = storage.get(State, state_id)
@@ -28,6 +33,7 @@ def delete_id_state(state_id):
     storage.delete(state)
     storage.save()
     return (jsonify({}), 200)
+
 
 @app_views.route('states', methods=["POST"], strict_slashes=False)
 def state_maker():
@@ -59,4 +65,3 @@ def state_update(state_id):
             setattr(the_id, key, value)
     the_id.save()
     return (jsonify(the_id.to_dict()), 200)
-

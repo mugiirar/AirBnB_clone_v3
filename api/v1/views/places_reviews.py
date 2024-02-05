@@ -9,15 +9,17 @@ from models.place import Place
 from models import storage
 
 
-@app_views.route('/places/<place_id>/reviews', methods=["GET"], strict_slashes=False)
+@app_views.route('/places/<place_id>/reviews',
+                 methods=["GET"], strict_slashes=False)
 def reviews_by_place(place_id):
     """ review objects by place_id """
     place_instance = storage.get(Place, place_id)
     if place_instance is None:
         abort(404)
-    
+
     review_dict = storage.all(Review)
-    review_list = [value.to_dict() for value in review_dict.values() if value.place_id == place_id]
+    review_list = [value.to_dict() for value in review_dict.values()
+                   if value.place_id == place_id]
     return jsonify(review_list)
 
 
@@ -27,7 +29,7 @@ def review_by_id(review_id):
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
-    
+
     return jsonify(review_instance.to_dict())
 
 
@@ -38,7 +40,7 @@ def del_review(review_id):
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
-    
+
     storage.delete(review_instance)
     storage.save()
     return jsonify({}), 200
@@ -51,21 +53,21 @@ def cr_review(place_id):
     place_instance = storage.get(Place, place_id)
     if place_instance is None:
         abort(404)
-    
+
     data_request = request.get_json()
     if not data_request:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    
+
     if "user_id" not in data_request:
         return make_response(jsonify({'error': 'Missing user_id'}), 400)
-    
+
     user_instance = storage.get(User, data_request["user_id"])
     if user_instance is None:
         abort(404)
-    
+
     if "text" not in data_request:
         return make_response(jsonify({'error': 'Missing text'}), 400)
-    
+
     data_request["place_id"] = place_id
     new_review_obj = Review(**data_request)
     new_review_obj.save()
@@ -78,16 +80,15 @@ def update_review(review_id):
     review_instance = storage.get(Review, review_id)
     if review_instance is None:
         abort(404)
-    
+
     data_request = request.get_json()
     if not data_request:
         return make_response(jsonify({'error': 'Not a JSON'}), 400)
-    
+
     ignore_keys = ["id", "created_at", "updated_at", "place_id", "user_id"]
     for key, value in data_request.items():
         if key not in ignore_keys:
             setattr(review_instance, key, value)
-    
+
     review_instance.save()
     return jsonify(review_instance.to_dict()), 200
-

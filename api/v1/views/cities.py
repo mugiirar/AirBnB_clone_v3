@@ -8,7 +8,9 @@ from models import storage
 from api.v1.views import app_views
 from flask import jsonify, make_response, abort, request
 
-@app_views.route('/states/<state_id>/cities', methods=["GET"], strict_slashes=False)
+
+@app_views.route('/states/<state_id>/cities',
+                 methods=["GET"], strict_slashes=False)
 def view_city(state_id):
     """return cities"""
     city = storage.get(State, state_id)
@@ -20,6 +22,7 @@ def view_city(state_id):
         list_of_cities.append(value.to_dict())
     return (jsonify(list_of_cities))
 
+
 @app_views.route('cities/<city_id>', methods=["GET"], strict_slashes=False)
 def id_city_view(city_id):
     """ give back city with a specific id"""
@@ -28,6 +31,7 @@ def id_city_view(city_id):
         abort(404)
 
     return (jsonify(city.to_dict()))
+
 
 @app_views.route('/cities/<city_id>', methods=["DELETE"], strict_slashes=False)
 def city_del(city_id):
@@ -39,7 +43,9 @@ def city_del(city_id):
     storage.save()
     return (jsonify({}), 200)
 
-@app_views.route('/states/<state_id>/cities', methods=["POST"], strict_slashes=False)
+
+@app_views.route('/states/<state_id>/cities',
+                 methods=["POST"], strict_slashes=False)
 def create_city(state_id):
     """creating a city"""
     state = storage.get(State, state_id)
@@ -59,6 +65,7 @@ def create_city(state_id):
     storage.save()
     return make_response(jsonify(city_obj.to_dict()), 201)
 
+
 @app_views.route('/cities/<city_id>', methods=["PUT"], strict_slashes=False)
 def city_update(city_id):
     """update the city"""
@@ -76,5 +83,3 @@ def city_update(city_id):
 
     city.save()
     return (jsonify(city.to_dict()), 200)
-
-
