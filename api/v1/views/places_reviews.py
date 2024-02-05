@@ -81,7 +81,7 @@ def update_mod(review_id):
     if data is None:
         abort(400, "Not a JSON")
 
-    if key, value in data.items():
+    for key, value in data.items():
         ignore_keys = ["id", "created_at", "updated_at", "place_id", "user_id"]
         if key not in ignore_keys:
             setattr(review, key, value)
