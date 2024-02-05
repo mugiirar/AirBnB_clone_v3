@@ -7,6 +7,7 @@ from api.v1.views import app_views
 from flask import jsonify, make_response, abort, request
 from models.user import User
 
+
 @app_views.route('/users', methods=["GET"], strict_slashes=False)
 def get_users():
     """give back users"""
@@ -18,6 +19,7 @@ def get_users():
 
     return (jsonify(list_users))
 
+
 @app_views.route('/users/<user_id>', methods=["GET"], strict_slashes=False)
 def specif_user(user_id):
     """give specific user"""
@@ -27,6 +29,7 @@ def specif_user(user_id):
 
     return (jsonify(user.to_dict()))
 
+
 @app_views.route('/users/<user_id>', methods=["DELETE"], strict_slashes=False)
 def del_user(user_id):
     """delete a user"""
@@ -35,7 +38,8 @@ def del_user(user_id):
         abort(404)
     storage.delete(user)
     storage.save()
-    return(jsonify({}), 200)
+    return (jsonify({}), 200)
+
 
 @app_views.route('/users', methods=["POST"], strict_slashes=False)
 def create_user():
@@ -50,6 +54,7 @@ def create_user():
     new_user = User(**data)
     new_user.save()
     return (jsonify(new_user.to_dict()), 201)
+
 
 @app_views.route('/users/<user_id>', methods=["PUT"], strict_slashes=False)
 def modify_user(user_id):
@@ -69,4 +74,3 @@ def modify_user(user_id):
 
     user.save()
     return (jsonify(user.to_dict()), 200)
-
