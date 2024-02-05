@@ -12,10 +12,12 @@ from models.amenity import Amenity
 from models.base_model import BaseModel, Base
 from models.city import City
 
+
 @app_views.route('/status')
 def status():
     """ returns a JSON"""
     return jsonify(status="OK")
+
 
 @app_views.route('/stats')
 def stats():
