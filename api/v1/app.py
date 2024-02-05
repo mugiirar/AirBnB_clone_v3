@@ -11,15 +11,18 @@ app = Flask(__name__)
 app.register_blueprint(app_views)
 cors = CORS(app, resources={r"/*": {"origins": "0.0.0.0"}})
 
+
 @app.teardown_appcontext
 def teardown_content(exception):
     """mathod that calls clode"""
     storage.close()
 
+
 @app.errorhandler(404)
 def found_not(error):
     """ 404 not found error """
     return (make_response(jsonify({'error': 'Not found'}), 404))
+
 
 if __name__ == "__main__":
     # Set host and port from environment variables or use default values
