@@ -29,28 +29,27 @@ def place_finder(place_id):
 def post_place(city_id):
     """posting a new place"""
     city = storage.get(City, city_id)
-    if not city:
-        abort(404)
-    data = request.get_json()
-    if not data:
-        abort(400, "Not a JSON")
-
-    if 'user_id' not in data.keys():
-        abort(404, 'Missing user_id')
-
-    user = storage.get(User, data["user_id"])
-
-    if user is None:
+    if city is None:
         abort(404)
 
-    if 'name' not in data.keys():
-        abort(400, 'Missing name')
+    data_request = request.get_json()
+    if not data_request:
+        return make_response(jsonify({'error': 'Not a JSON'}), 400)
 
-    new_obj=Place(**data)
-    setattr(new_obj, 'city_id', city_id)
-    storage.new(new_obj)
-    storage.save()
-    return (jsonify(new_obj.to_dict()), 201)
+    if "user_id" not in data_request:
+        return make_response(jsonify({'error': 'Missing user_id'}), 400)
+
+    user_id = storage.get(User, data_request["user_id"])
+    if user_id is None:
+        abort(404)
+
+    if "name" not in data_request:
+        return make_response(jsonify({'error': 'Missing name'}), 400)
+
+    data_request["city_id"] = city_id
+    new_place_obj = Place(**data_request)
+    new_place_obj.save()
+    return (jsonify(new_place_obj.to_dict()), 201)
 
 @app_views.route('/places/<place_id>', methods=["DELETE"], strict_slashes=False)
 def delete_place(place_id):
